@@ -15,8 +15,8 @@
  */
 package com.example.android.miwok;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -43,8 +43,7 @@ public class PhrasesActivity extends AppCompatActivity {
         words.add(new Word("Come here.", "әnni'nem"));
 
         numbersListView = (ListView) findViewById(R.id.list);
-
-        numbersListView.setAdapter(new WordAdapter(this,words));
+        numbersListView.setAdapter(new WordAdapter(this,words, R.color.category_phrases));
 
     }
 }
