@@ -17,7 +17,9 @@ import java.util.List;
 
 public class WordAdapter extends ArrayAdapter<Word> {
 
-    int listItemColor = 0;
+    private int listItemColor = 0;
+//    private MediaPlayer mMediaPlayer;
+    private Word word;
 
     public WordAdapter(Context context, List<Word> objects, int color) {
         super(context, 0, objects);
@@ -34,12 +36,12 @@ public class WordAdapter extends ArrayAdapter<Word> {
             view = LayoutInflater.from(getContext()).inflate(R.layout.list_item,parent,false);
         }
 
-        Word word = getItem(position);
+        word = getItem(position);
 
         TextView englishTextView = (TextView) view.findViewById(R.id.english_word);
         englishTextView.setText(word.getEnglishTranslation());
 
-        TextView miwokTextView = (TextView) view.findViewById(R.id.miwok_word);
+        final TextView miwokTextView = (TextView) view.findViewById(R.id.miwok_word);
         miwokTextView.setText(word.getMiwokTranslation());
 
         ImageView icon = (ImageView) view.findViewById(R.id.imageView);
@@ -49,6 +51,18 @@ public class WordAdapter extends ArrayAdapter<Word> {
             icon.setVisibility(View.GONE);
         }
         view.setBackgroundColor(ContextCompat.getColor(getContext(), listItemColor));
+
+
+//        ImageView playImageView = (ImageView) view.findViewById(R.id.play_imageview);
+//        playImageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //setup audio player
+//                mMediaPlayer = MediaPlayer.create(getContext(), word.getAudioResourceId());
+//                mMediaPlayer.start();
+//            }
+//        });
+
 
         return view;
     }
