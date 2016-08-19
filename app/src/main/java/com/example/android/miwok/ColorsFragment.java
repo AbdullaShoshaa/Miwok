@@ -16,26 +16,36 @@
 package com.example.android.miwok;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class ColorsActivity extends AppCompatActivity {
+public class ColorsFragment extends Fragment {
 
-    ListView numbersListView;
-    MiwokMediaPlayer miwokMediaPlayer;
-    private final String LOG_TAG = ColorsActivity.class.getSimpleName();
+    private ListView colorsListView;
+    private MiwokMediaPlayer miwokMediaPlayer;
+    private ArrayList<Word> words = new ArrayList<>();
+    private final String LOG_TAG = ColorsFragment.class.getSimpleName();
+
+    public ColorsFragment() {
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.word_list);
+    }
 
-        final ArrayList<Word> words = new ArrayList<>();
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        View rootView = inflater.inflate(R.layout.word_list, container, false);
 
         words.add(new Word("red", "weṭeṭṭi", R.drawable.color_red, R.raw.color_red));
         words.add(new Word("green", "chokokki", R.drawable.color_green, R.raw.color_green));
@@ -46,12 +56,12 @@ public class ColorsActivity extends AppCompatActivity {
         words.add(new Word("dusty yellow", "ṭopiisә", R.drawable.color_dusty_yellow, R.raw.color_dusty_yellow));
         words.add(new Word("mustard yellow", "chiwiiṭә", R.drawable.color_mustard_yellow, R.raw.color_mustard_yellow));
 
-        numbersListView = (ListView) findViewById(R.id.list);
-        numbersListView.setAdapter(new WordAdapter(this,words,R.color.category_colors));
+        colorsListView = (ListView) rootView.findViewById(R.id.list);
+        colorsListView.setAdapter(new WordAdapter(getActivity(),words,R.color.category_colors));
 
-        miwokMediaPlayer = new MiwokMediaPlayer(this);
+        miwokMediaPlayer = new MiwokMediaPlayer(getActivity());
 
-        numbersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        colorsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 miwokMediaPlayer.playWord(words.get(position).getAudioResourceId());
@@ -59,11 +69,11 @@ public class ColorsActivity extends AppCompatActivity {
             }
         });
 
-
+        return rootView;
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         miwokMediaPlayer.releaseMediaPlayer();
     }

@@ -16,24 +16,30 @@
 package com.example.android.miwok;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class PhrasesActivity extends AppCompatActivity {
+public class PhrasesFragment extends Fragment {
 
-    ListView numbersListView;
-    MiwokMediaPlayer miwokMediaPlayer;
+    private ListView phrasesListView;
+    private MiwokMediaPlayer miwokMediaPlayer;
+    private ArrayList<Word> words;
+
+    public PhrasesFragment() {
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.word_list);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        final ArrayList<Word> words = new ArrayList<>();
+        View rootView = inflater.inflate(R.layout.word_list, container, false);
+        words = new ArrayList<>();
 
         words.add(new Word("Where are you going?", "minto wuksus", R.raw.phrase_where_are_you_going));
         words.add(new Word("What is your name?", "tinnә oyaase'nә", R.raw.phrase_what_is_your_name));
@@ -46,21 +52,22 @@ public class PhrasesActivity extends AppCompatActivity {
         words.add(new Word("Let’s go.", "yoowutis", R.raw.phrase_lets_go));
         words.add(new Word("Come here.", "әnni'nem", R.raw.phrase_come_here));
 
-        numbersListView = (ListView) findViewById(R.id.list);
-        numbersListView.setAdapter(new WordAdapter(this,words, R.color.category_phrases));
+        phrasesListView = (ListView) rootView.findViewById(R.id.list);
+        phrasesListView.setAdapter(new WordAdapter(getContext(),words, R.color.category_phrases));
 
-        miwokMediaPlayer = new MiwokMediaPlayer(this);
+        miwokMediaPlayer = new MiwokMediaPlayer(getContext());
 
-        numbersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        phrasesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 miwokMediaPlayer.playWord(words.get(position).getAudioResourceId());
             }
         });
+        return rootView;
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         miwokMediaPlayer.releaseMediaPlayer();
     }

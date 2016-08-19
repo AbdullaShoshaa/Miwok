@@ -16,23 +16,37 @@
 package com.example.android.miwok;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class FamilyActivity extends AppCompatActivity {
+public class FamilyFragment extends Fragment {
 
-    ListView numbersListView;
-    MiwokMediaPlayer mMediaPlayer;
+    private ListView familyListView;
+    private MiwokMediaPlayer mMediaPlayer;
+    private WordAdapter wordAdapter;
+    private ArrayList<Word> words;
+    private final String LOG_TAG = FamilyFragment.class.getSimpleName();
+
+    public FamilyFragment() {
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.word_list);
+        words = new ArrayList<>();
+    }
 
-        final ArrayList<Word> words = new ArrayList<>();
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.word_list, container, false);
 
         words.add(new Word("father", "әpә", R.drawable.family_father, R.raw.family_father));
         words.add(new Word("mother", "әṭa", R.drawable.family_mother, R.raw.family_mother));
@@ -45,23 +59,30 @@ public class FamilyActivity extends AppCompatActivity {
         words.add(new Word("grandmother", "ama",R.drawable.family_grandmother, R.raw.family_grandmother));
         words.add(new Word("grandfather", "paapa", R.drawable.family_grandfather, R.raw.family_grandfather));
 
-        numbersListView = (ListView) findViewById(R.id.list);
+        familyListView = (ListView) rootView.findViewById(R.id.list);
+        if(familyListView == null){
+            Log.w(LOG_TAG, "familyListView is null");
+        }
+        wordAdapter = new WordAdapter(getActivity(), words, R.color.category_family);
+        familyListView.setAdapter(wordAdapter);
 
-        numbersListView.setAdapter(new WordAdapter(this,words, R.color.category_family));
+        mMediaPlayer = new MiwokMediaPlayer(getActivity());
 
-        mMediaPlayer = new MiwokMediaPlayer(this);
-
-        numbersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        familyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mMediaPlayer.playWord(words.get(position).getAudioResourceId());
             }
         });
+
+        return rootView;
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         mMediaPlayer.releaseMediaPlayer();
     }
+
+
 }

@@ -53,17 +53,6 @@ public class WordAdapter extends ArrayAdapter<Word> {
         view.setBackgroundColor(ContextCompat.getColor(getContext(), listItemColor));
 
 
-//        ImageView playImageView = (ImageView) view.findViewById(R.id.play_imageview);
-//        playImageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //setup audio player
-//                mMediaPlayer = MediaPlayer.create(getContext(), word.getAudioResourceId());
-//                mMediaPlayer.start();
-//            }
-//        });
-
-
         return view;
     }
 }
